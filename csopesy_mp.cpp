@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 class ScreenProcess;
 
 void printActiveProcesses(vector <ScreenProcess> processList);
@@ -55,19 +54,39 @@ public:
 				}
 				string temp_arg = tokenizedInput[1];
 				if (temp_arg == "-r") {
-					//reattach
-					for (auto element : processList) {
+					// reattach
+					bool found = false;
+					for (auto& element : processList) {
 						if (element.getProcessName() == tokenizedInput[2]) {
-							element.open();
+							element.open();  // Found the process, open it
+							found = true;    // Set found flag to true
+							break;           // Exit the loop after finding the process
 						}
+					}
+					if (!found) {
+						cout << "Process not found, try using 'screen -ls' to list currently active processes" << endl;
 					}
 				}
 				else if (temp_arg == "-s") {
-					//create new process
-					ScreenProcess newScreen(tokenizedInput[2]);
-					processList.push_back(newScreen);
-					cout << "new process added!" << endl;
-					newScreen.open();
+					// check if the process with the same name already exists
+					bool exists = false;
+					for (auto& element : processList) {
+						if (element.getProcessName() == tokenizedInput[2]) {
+							exists = true;
+							break;
+						}
+					}
+
+					if (exists) {
+						cout << "A process with the name '" << tokenizedInput[2] << "' already exists. Please use a unique name." << endl;
+					}
+					else {
+						// create new process if the name is unique
+						ScreenProcess newScreen(tokenizedInput[2]);
+						processList.push_back(newScreen);
+						cout << "New process '" << tokenizedInput[2] << "' added!" << endl;
+						newScreen.open();
+					}
 				}
 				else if (temp_arg == "-ls") {
 					printActiveProcesses(processList);
@@ -128,23 +147,44 @@ int main() {
 			}
 			string temp_arg = tokenizedInput[1];
 			if (temp_arg == "-r") {
-				//reattach
-				for (auto element : processList) {
+				// reattach
+				bool found = false;
+				for (auto& element : processList) {
 					if (element.getProcessName() == tokenizedInput[2]) {
-						element.open();
+						element.open();  // Found the process, open it
+						found = true;    // Set found flag to true
+						break;           // Exit the loop after finding the process
 					}
+				}
+				if (!found) {
+					cout << "Process not found, try using 'screen -ls' to list currently active processes" << endl;
 				}
 			}
 			else if (temp_arg == "-s") {
-				//create new process
-				ScreenProcess newScreen(tokenizedInput[2]);
-				processList.push_back(newScreen);
-				cout << "new process added!" << endl;
-				newScreen.open();
+				// check if the process with the same name already exists
+				bool exists = false;
+				for (auto& element : processList) {
+					if (element.getProcessName() == tokenizedInput[2]) {
+						exists = true;
+						break;
+					}
+				}
+
+				if (exists) {
+					cout << "A process with the name '" << tokenizedInput[2] << "' already exists. Please use a unique name." << endl;
+				}
+				else {
+					// create new process if the name is unique
+					ScreenProcess newScreen(tokenizedInput[2]);
+					processList.push_back(newScreen);
+					cout << "New process '" << tokenizedInput[2] << "' added!" << endl;
+					newScreen.open();
+				}
 			}
 			else if (temp_arg == "-ls") {
 				printActiveProcesses(processList);
 			}
+
 		}
 		else {
 			if (!handleInput(input)) { return 0; }
