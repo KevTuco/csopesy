@@ -101,6 +101,8 @@ bool handleInput(string input) {
 
     else if (input == "exit") {
         cout << "exit command recognized. Doing something." << endl;
+        system("cls");
+        printHeader();
         return false;
     }
 

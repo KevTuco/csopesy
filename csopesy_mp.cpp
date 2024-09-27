@@ -36,6 +36,8 @@ public:
 	}
 	void open() {
 		//takeOver
+		system("cls");
+		printHeader();
 		showProcessInfo();
 
 		string input;
@@ -68,6 +70,12 @@ public:
 					}
 				}
 				else if (temp_arg == "-s") {
+					// Check for new screen
+					if (tokenizedInput.size() < 3) {
+						cout << "No process name provided for -s. Please specify a unique process name." << endl;
+						continue; // Skip further processing
+					}
+
 					// check if the process with the same name already exists
 					bool exists = false;
 					for (auto& element : processList) {
